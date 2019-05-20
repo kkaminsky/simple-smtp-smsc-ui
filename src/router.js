@@ -3,29 +3,48 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Register from './views/Register.vue'
 import UserCabinet from './views/UserCabinet.vue'
+import SignIn from './views/SignIn.vue'
+import Confirm from './views/Confirm.vue'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta:{requiresAuth:false}
+    },
+    {
+      path: '/confirm',
+      name: 'confirm',
+      component: Confirm,
+      meta:{requiresAuth:false}
+    },
+    {
+      path: '/signin',
+      name: 'signin',
+      component: SignIn,
+      meta:{requiresAuth:false}
     },
     {
       path: '/usercabinet',
       name: 'usercabinet',
-      component: UserCabinet
+      component: UserCabinet,
+      meta:{requiresAuth:true}
+
     },
     {
       path:'/register',
       name: 'register',
-      component: Register
+      component: Register,
+      meta:{requiresAuth:false}
     },
     {
       path: '/about',
       name: 'about',
+      meta:{requiresAuth:false},
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -34,3 +53,25 @@ export default new Router({
   ],
   mode:'history'
 })
+
+
+router.beforeEach((to, from, next) => {
+  console.log(to.matched.some(record => record.meta.requiresAuth))
+  if(to.matched.some(record => record.meta.requiresAuth))
+  {
+    if (localStorage.getItem('enable') == null) {
+      next({
+        name: 'signin',
+      })
+    }
+    else {
+      next()
+    }
+
+  }
+  else {
+    next()
+  }
+})
+
+export default router
