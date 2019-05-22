@@ -53,9 +53,8 @@
 
 
               <v-text-field
-                v-model="email"
+                v-model="login"
                 :label="select"
-
                 required
               ></v-text-field>
 
@@ -64,6 +63,7 @@
 
 
               <v-text-field
+                type="password"
                 v-model="password"
                 label="Password"
                 data-vv-name="password"
@@ -71,13 +71,7 @@
               ></v-text-field>
 
 
-            <v-text-field
-              v-if=flag
-              v-model="code"
-              label="Code"
-              data-vv-name="code"
-              required
-            ></v-text-field>
+
 
 
 
@@ -99,14 +93,13 @@
       name: "RegisterComponent",
       data(){
         return{
-          email:"",
+          login:"",
           name:"",
           password:"",
-          flag: false,
-          select: 'Email',
+          select: 'email',
           items: [
-            'Email',
-            'Phone number'
+            'email',
+            'phone'
           ]
         }
       },
@@ -117,9 +110,10 @@
         submit(){
           let vm = this
           this.$http.post("/api/register",{
-            "email":this.email,
+            "login":this.login,
             "password":this.password,
-            "name":this.name
+            "name":this.name,
+            "method":this.select
           }).then(res=>{
 
             localStorage.setItem("username",this.name)

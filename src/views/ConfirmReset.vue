@@ -1,5 +1,5 @@
 <template>
-  <confirm-component redirect="/usercabinet"></confirm-component>
+  <confirm-component redirect="/newpassword"></confirm-component>
 </template>
 
 <script>

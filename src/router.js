@@ -5,6 +5,9 @@ import Register from './views/Register.vue'
 import UserCabinet from './views/UserCabinet.vue'
 import SignIn from './views/SignIn.vue'
 import Confirm from './views/Confirm.vue'
+import ResetPassword from './views/ResetPassword.vue'
+import ConfirmReset from './views/ConfirmReset.vue'
+import NewPassword from './views/NewPassword.vue'
 
 Vue.use(Router)
 
@@ -14,6 +17,24 @@ const router =  new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta:{requiresAuth:false}
+    },
+    {
+      path: '/newpassword',
+      name: 'newpassword',
+      component: NewPassword,
+      meta:{requiresAuth:false}
+    },
+    {
+      path: '/confirmreset',
+      name: 'confirmreset',
+      component: ConfirmReset,
+      meta:{requiresAuth:false}
+    },
+    {
+      path: '/resetpassword',
+      name: 'resetpassword',
+      component: ResetPassword,
       meta:{requiresAuth:false}
     },
     {

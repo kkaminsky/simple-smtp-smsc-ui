@@ -1,34 +1,35 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+<template>
   <v-container fluid>
-
     <v-flex xs12 sm8 md4 offset-md4>
       <v-card>
         <v-img
           class="white--text"
           height="200px"
-          src="https://images.alphacoders.com/881/881287.jpg"
+          src="https://neilpatel.com/wp-content/uploads/2015/10/colors.jpg"
         >
           <v-container fill-height fluid>
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox>
-                <span class="headline">Confirm</span>
+                <span class="headline " style="float: right">SignIn</span>
               </v-flex>
             </v-layout>
           </v-container>
         </v-img>
-        <v-card-title>Please confirm action, enter code</v-card-title>
         <v-card-text>
 
 
           <v-text-field
-            v-model="code"
-
-
-            label="Code"
+            type="password"
+            v-model="password"
+            label="new password"
+            data-vv-name="password"
             required
           ></v-text-field>
 
-          <v-btn @click="submit" color="success" flat>confirm</v-btn>
+
+
+
+          <v-btn @click="submit" color="success" flat>submit</v-btn>
 
         </v-card-text>
 
@@ -43,28 +44,21 @@
 
 <script>
   export default {
-    name: "ConfirmComponent",
-    props:{
-      redirect:String
-    },
+    name: "NewPasswordComponent",
     data(){
       return{
-        code:""
+        password:"",
+        flag: false
       }
     },
     methods:{
-      submit2(){
-        let vm = this
-      },
       submit(){
         let vm = this
-        this.$http.post("/api/confirm",{
-          "code":this.code,
-          "name":localStorage.getItem("username")
+        this.$http.post("/api/newpassword",{
+          "name":localStorage.getItem("username"),
+          "password":this.password
         }).then(res=>{
-          localStorage.setItem("enable","true")
-          vm.$router.push(this.redirect)
-
+          vm.$router.push("/usercabinet")
         },e=>{
           alert("Ошибка!" + e.response.data.message)
         })
