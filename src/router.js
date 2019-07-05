@@ -8,6 +8,7 @@ import Confirm from './views/Confirm.vue'
 import ResetPassword from './views/ResetPassword.vue'
 import ConfirmReset from './views/ConfirmReset.vue'
 import NewPassword from './views/NewPassword.vue'
+import RedirectPage from './views/RedirectPage.vue'
 
 Vue.use(Router)
 
@@ -61,6 +62,11 @@ const router =  new Router({
       name: 'register',
       component: Register,
       meta:{requiresAuth:false}
+    },
+    {
+      path: '/redirect',
+      name: 'redirect',
+      component: RedirectPage
     },
     {
       path: '/about',

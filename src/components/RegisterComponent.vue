@@ -18,6 +18,40 @@
           </v-img>
           <v-card-text>
 
+
+            <v-combobox
+              v-model="select"
+              :items="items"
+              chips
+              label="Registration method"
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  :key="JSON.stringify(data.item)"
+                  :selected="data.selected"
+                  :disabled="data.disabled"
+                  class="v-chip--select-multi"
+                  @click.stop="data.parent.selectedIndex = data.index"
+                  @input="data.parent.selectItem(data.item)"
+                >
+                  <v-avatar class="accent white--text">
+                    {{ data.item.slice(0, 1).toUpperCase() }}
+                  </v-avatar>
+                  {{ data.item }}
+                </v-chip>
+              </template>
+            </v-combobox>
+
+
+
+
+            <v-flex  v-if="select==='vk'" class="mt-5 mb-5 text-xs-center">
+              <v-btn @click="oauth()">
+                Регистрация с помощью Вконтакте
+              </v-btn>
+            </v-flex>
+
+            <v-flex v-else>
               <v-text-field
                 v-model="name"
 
@@ -27,35 +61,10 @@
                 required
               ></v-text-field>
 
-              <v-combobox
-                v-model="select"
-                :items="items"
-                chips
-                label="Registration method"
-              >
-                <template v-slot:selection="data">
-                  <v-chip
-                    :key="JSON.stringify(data.item)"
-                    :selected="data.selected"
-                    :disabled="data.disabled"
-                    class="v-chip--select-multi"
-                    @click.stop="data.parent.selectedIndex = data.index"
-                    @input="data.parent.selectItem(data.item)"
-                  >
-                    <v-avatar class="accent white--text">
-                      {{ data.item.slice(0, 1).toUpperCase() }}
-                    </v-avatar>
-                    {{ data.item }}
-                  </v-chip>
-                </template>
-              </v-combobox>
-
-
-
               <v-text-field
-                v-model="login"
-                :label="select"
-                required
+                            v-model="login"
+                            :label="select"
+                            required
               ></v-text-field>
 
 
@@ -70,12 +79,12 @@
                 required
               ></v-text-field>
 
+              <v-btn  @click="submit" color="success" flat>submit</v-btn>
+            </v-flex>
 
 
 
 
-
-            <v-btn @click="submit" color="success" flat>submit</v-btn>
 
           </v-card-text>
 
@@ -99,7 +108,8 @@
           select: 'email',
           items: [
             'email',
-            'phone'
+            'phone',
+            'vk'
           ]
         }
       },
@@ -123,7 +133,39 @@
             console.log(Object.keys(e.response.data))
             alert("Ошибка!" + e.response.data.message)
           })
-        }
+        },
+        oauth(){
+          let vm = this
+
+          let redirWin = window.open("https://oauth.vk.com/authorize?client_id=7045685&display=page&redirect_uri=http://localhost:8081/redirect&scope=groups&response_type=code&v=5.95",'_blank', 'height=355,width=660,scrollbars=yes,status=1')
+
+          var timer = setInterval(function() {
+            console.log("timer work")
+            if(redirWin.closed) {
+              clearInterval(timer);
+              console.log(localStorage.getItem("123"))
+              vm.$http.post("/api/oauth",{
+                "code": localStorage.getItem("code"),
+                "str":"str"
+              }).then(res=>{
+
+                localStorage.setItem("username",res.data)
+                localStorage.setItem("enable","true")
+
+                vm.$router.push("/usercabinet")
+              },err=>{
+                alert(err.message)
+              })
+            }
+          }, 500);
+          /*this.$http.get("/login")
+            .then(res=>{
+              console.log(res)
+          },
+          err=>{
+              console.log(err)
+          })*/
+        },
 
       }
     }
